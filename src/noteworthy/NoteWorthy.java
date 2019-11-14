@@ -15,6 +15,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import java.io.File;
+import org.jfugue.player.*;
+import org.jfugue.theory.*;
+import org.jfugue.pattern.*;
 
 
 /**
@@ -33,6 +36,7 @@ public class NoteWorthy extends javax.swing.JFrame {
     private static final int NOT_FOUND = -1;
     private static final int NO = 1;
     private static final int CANCEL = 2;
+    private Pattern pattern;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -49,8 +53,9 @@ public class NoteWorthy extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea = new javax.swing.JTextArea();
-        jButton_GO = new javax.swing.JButton();
+        jButton_BUILD = new javax.swing.JButton();
         jButton_DOWNLOAD = new javax.swing.JButton();
+        jButton_PLAY = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu_FILE = new javax.swing.JMenu();
         jMenuItem_IMPORT = new javax.swing.JMenuItem();
@@ -140,12 +145,12 @@ public class NoteWorthy extends javax.swing.JFrame {
         jTextArea.setSelectionColor(new java.awt.Color(204, 204, 204));
         jScrollPane1.setViewportView(jTextArea);
 
-        jButton_GO.setBackground(new java.awt.Color(102, 102, 102));
-        jButton_GO.setForeground(new java.awt.Color(255, 255, 255));
-        jButton_GO.setText("Go!");
-        jButton_GO.addActionListener(new java.awt.event.ActionListener() {
+        jButton_BUILD.setBackground(new java.awt.Color(102, 102, 102));
+        jButton_BUILD.setForeground(new java.awt.Color(255, 255, 255));
+        jButton_BUILD.setText("Build");
+        jButton_BUILD.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_GOActionPerformed(evt);
+                jButton_BUILDActionPerformed(evt);
             }
         });
 
@@ -158,6 +163,15 @@ public class NoteWorthy extends javax.swing.JFrame {
             }
         });
 
+        jButton_PLAY.setBackground(new java.awt.Color(102, 102, 102));
+        jButton_PLAY.setForeground(new java.awt.Color(255, 255, 255));
+        jButton_PLAY.setText("Play");
+        jButton_PLAY.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_PLAYActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -165,10 +179,12 @@ public class NoteWorthy extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 688, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 698, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton_GO, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton_PLAY, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton_BUILD, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton_DOWNLOAD)
                         .addGap(6, 6, 6)))
@@ -181,8 +197,9 @@ public class NoteWorthy extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton_GO)
-                    .addComponent(jButton_DOWNLOAD))
+                    .addComponent(jButton_BUILD)
+                    .addComponent(jButton_DOWNLOAD)
+                    .addComponent(jButton_PLAY))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -256,14 +273,53 @@ public class NoteWorthy extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton_GOActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_GOActionPerformed
+    private void jButton_BUILDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_BUILDActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton_GOActionPerformed
+        Music music = new Music(jTextArea.getText());
+        pattern = music.build();
+        JOptionPane.showMessageDialog(null, "Sucesso");
+    }//GEN-LAST:event_jButton_BUILDActionPerformed
 
     private void jButton_DOWNLOADActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_DOWNLOADActionPerformed
         // TODO add your handling code here:
+        JFileChooser jfc  = new JFileChooser(System.getProperty("user.dir"));
+        jfc.setDialogTitle("Download");
+        jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+        if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
+            jMenuItem_DOWNLOAD_write(jfc.getSelectedFile());
     }//GEN-LAST:event_jButton_DOWNLOADActionPerformed
 
+    private void jMenuItem_DOWNLOAD_write(File directory) {
+        
+        String fileName = JOptionPane.showInputDialog(null,"Save MIDI as:", "myMusic.midi");
+
+        if (fileName != null){ //n cancelado
+        
+                if (fileName.lastIndexOf('.') == NOT_FOUND) 
+                    fileName = fileName.concat(".midi");
+
+                String path = directory.getPath() + "\\" + fileName;
+                File newFile = new File(path);
+
+                if(newFile.exists() && !newFile.isDirectory()){
+                    int overwrite = JOptionPane.showConfirmDialog(null, "This file already exists. Do you wish to overwrite it?", "Found file",JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                    if(overwrite == NO) jMenuItem_EXPORT_write(directory);
+                    else if(overwrite == CANCEL) return;
+                }
+                /*
+                Player player = new Player();
+                Pattern pattern = new Pattern("A5q B5q C5q"); 
+                try {
+                    MidiFileManager.savePatternToMidi(pattern, new File("JFugue4.mid"));
+                } catch (IOException e)
+                {
+                // handle IO Exception
+                }*/
+                
+        }
+    }
+    
     private void jMenu_FILEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu_FILEActionPerformed
         // TODO add your handling code here:   
     }//GEN-LAST:event_jMenu_FILEActionPerformed
@@ -318,6 +374,12 @@ public class NoteWorthy extends javax.swing.JFrame {
         jTable_MAPEAMENTO.setVisible(true);
     }//GEN-LAST:event_jMenuItem_HELPActionPerformed
 
+    private void jButton_PLAYActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_PLAYActionPerformed
+        // TODO add your handling code here:
+        Player player = new Player();
+        player.play(pattern);
+    }//GEN-LAST:event_jButton_PLAYActionPerformed
+
     private void jMenuItem_EXPORT_write(File directory) {
         
         String text = jTextArea.getText();
@@ -361,7 +423,7 @@ public class NoteWorthy extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Metal".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
@@ -382,14 +444,15 @@ public class NoteWorthy extends javax.swing.JFrame {
             @Override
             public void run() {
                 
-                new NoteWorthy().setVisible(true);
+                new NoteWorthy().setVisible(true);                    
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton_BUILD;
     private javax.swing.JButton jButton_DOWNLOAD;
-    private javax.swing.JButton jButton_GO;
+    private javax.swing.JButton jButton_PLAY;
     private javax.swing.JFrame jFrame_MAPEAMENTO;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem_EXPORT;
