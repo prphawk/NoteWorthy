@@ -31,6 +31,7 @@ public class NoteWorthy extends javax.swing.JFrame {
      */
     public NoteWorthy() {
         initComponents();
+        pattern = null;
     }
     
     private static final int NOT_FOUND = -1;
@@ -138,7 +139,7 @@ public class NoteWorthy extends javax.swing.JFrame {
         jTextArea.setForeground(new java.awt.Color(102, 102, 102));
         jTextArea.setLineWrap(true);
         jTextArea.setRows(5);
-        jTextArea.setText("Sphinx of black quartz, judge my vow.");
+        jTextArea.setText("SPHINX OF BLACK QUARTZ, JUDGE MY VOW.");
         jTextArea.setToolTipText("");
         jTextArea.setWrapStyleWord(true);
         jTextArea.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -274,40 +275,40 @@ public class NoteWorthy extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton_BUILDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_BUILDActionPerformed
-        // TODO add your handling code here:
-        Music music = new Music(jTextArea.getText());
-        pattern = music.build();
-        JOptionPane.showMessageDialog(null, "Sucesso");
+        // Operaçao para contruir nova Pattern a partir do texto presente na caixa de texto
+        Music music = new Music(jTextArea.getText()); 
+        pattern = music.build(); //devolve Pattern construida, atribui ela a classe NoteWorthy para ser reproduzida indefinidamente ou até outra pattern ser construida
+        JOptionPane.showMessageDialog(null, "Sucesso"); //aviso (temporário pq eh mt feio) que pode reproduzir pattern em PLAY
     }//GEN-LAST:event_jButton_BUILDActionPerformed
 
     private void jButton_DOWNLOADActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_DOWNLOADActionPerformed
-        // TODO add your handling code here:
+        //Operação para salvar Pattern construida em arquivo MIDI
         JFileChooser jfc  = new JFileChooser(System.getProperty("user.dir"));
         jfc.setDialogTitle("Download");
         jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
-        if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
+        if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) //seleciona caminho para novo arquivo
             jMenuItem_DOWNLOAD_write(jfc.getSelectedFile());
     }//GEN-LAST:event_jButton_DOWNLOADActionPerformed
 
-    private void jMenuItem_DOWNLOAD_write(File directory) {
-        
+    private void jMenuItem_DOWNLOAD_write(File directory) { 
+        //Operação auxiliar para salvar Pattern construida em arquivo MIDI
         String fileName = JOptionPane.showInputDialog(null,"Save MIDI as:", "myMusic.midi");
 
         if (fileName != null){ //n cancelado
         
                 if (fileName.lastIndexOf('.') == NOT_FOUND) 
-                    fileName = fileName.concat(".midi");
+                    fileName = fileName.concat(".midi"); //testa extensao no nome dado
 
                 String path = directory.getPath() + "\\" + fileName;
                 File newFile = new File(path);
 
-                if(newFile.exists() && !newFile.isDirectory()){
+                if(newFile.exists() && !newFile.isDirectory()){ //se arquivo já existe, testa de usuário quer sobreescrever
                     int overwrite = JOptionPane.showConfirmDialog(null, "This file already exists. Do you wish to overwrite it?", "Found file",JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-                    if(overwrite == NO) jMenuItem_EXPORT_write(directory);
+                    if(overwrite == NO) jMenuItem_EXPORT_write(directory); //repete processo para usuário inserir outro nome
                     else if(overwrite == CANCEL) return;
                 }
-                /*
+                /* essa eh o método pra salvar pattern em arquivo MIDI mas aparentemente ele nao existe mais
                 Player player = new Player();
                 Pattern pattern = new Pattern("A5q B5q C5q"); 
                 try {
@@ -330,25 +331,25 @@ public class NoteWorthy extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenu_HELPActionPerformed
 
     private void jMenuItem_IMPORTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_IMPORTActionPerformed
-        // TODO add your handling code here:
+        // operação de importação de arquivo .txt
         JFileChooser jfc = new JFileChooser(System.getProperty("user.dir"));
         jfc.setDialogTitle("Import");
-        jfc.setAcceptAllFileFilterUsed(false);
+        jfc.setAcceptAllFileFilterUsed(false); //apenas arquivos .txt
         jfc.addChoosableFileFilter(new FileNameExtensionFilter(".txt", "txt"));
 
-        if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+        if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) { 
             
             BufferedReader reader = null;
-            StringBuilder stringBuilder = new StringBuilder();
+            StringBuilder stringBuilder = new StringBuilder(); //para construir string final
             
             try {
-                reader = new BufferedReader(new FileReader(jfc.getSelectedFile()));
-                String line = null;
+                reader = new BufferedReader(new FileReader(jfc.getSelectedFile())); //seleciona arquivo para ser lido
+                String paragraph = null; //inicializa string do buffer
                 
-                while((line = reader.readLine()) != null) 
-                    stringBuilder.append(line).append("\n");
+                while((paragraph = reader.readLine()) != null) //lê parágrafos inteiros (até seus \n) até acabar arquivo
+                    stringBuilder.append(paragraph).append("\n"); //separa parágrafos novamente para saída
 
-                jTextArea.setText(stringBuilder.toString());
+                jTextArea.setText(stringBuilder.toString()); //caixa de texto com material do arquivo .txt carregado
                 reader.close();
                                  
             } catch (IOException ex) {
@@ -358,14 +359,13 @@ public class NoteWorthy extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem_IMPORTActionPerformed
 
     private void jMenuItem_EXPORTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_EXPORTActionPerformed
-        // TODO add your handling code here:
-                
+        // Operação de exportação de arquivo .txt
         JFileChooser jfc  = new JFileChooser(System.getProperty("user.dir"));
         jfc.setDialogTitle("Export");
-        jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); //selecionar pasta de destino
 
-        if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
-            jMenuItem_EXPORT_write(jfc.getSelectedFile());
+        if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) //operação não cancelada
+            jMenuItem_EXPORT_write(jfc.getSelectedFile()); //função auxiliar
 
     }//GEN-LAST:event_jMenuItem_EXPORTActionPerformed
 
@@ -375,33 +375,35 @@ public class NoteWorthy extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem_HELPActionPerformed
 
     private void jButton_PLAYActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_PLAYActionPerformed
-        // TODO add your handling code here:
-        Player player = new Player();
-        player.play(pattern);
+        // Toca o Pattern (do JFugue) já construído por Music e atribuido em NoteWorthy
+        if(pattern != null){
+            Player player = new Player();
+            player.play(pattern);
+        }
     }//GEN-LAST:event_jButton_PLAYActionPerformed
 
-    private void jMenuItem_EXPORT_write(File directory) {
+    private void jMenuItem_EXPORT_write(File directory) { //função auxiliar para exportar o arquivo .txt
         
-        String text = jTextArea.getText();
+        String text = jTextArea.getText(); //seleciona texto para escrever em arquivo
         String fileName = JOptionPane.showInputDialog(null,"Save file as:", "untitled.txt");
 
-        if (fileName != null){ //n cancelado
+        if (fileName != null){ //operação nao cancelada
         
             try {
 
                 if (fileName.lastIndexOf('.') == NOT_FOUND) 
-                    fileName = fileName.concat(".txt");
+                    fileName = fileName.concat(".txt"); //checa extensão no nome salvo
 
-                String path = directory.getPath() + "\\" + fileName;
+                String path = directory.getPath() + "\\" + fileName; //constroi caminho para novo arquivo 
                 File newFile = new File(path);
 
-                if(newFile.exists() && !newFile.isDirectory()){
+                if(newFile.exists() && !newFile.isDirectory()){ //testa se usuário quer sobreescrever arquivo com o mesmo nome
                     int overwrite = JOptionPane.showConfirmDialog(null, "This file already exists. Do you wish to overwrite it?", "Found file",JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-                    if(overwrite == NO) jMenuItem_EXPORT_write(directory);
+                    if(overwrite == NO) jMenuItem_EXPORT_write(directory); //se não, repete operação pro usuário salvar com outro nome
                     else if(overwrite == CANCEL) return;
                 }
-
-                PrintWriter out;
+                
+                PrintWriter out; //se usuário resolveu sobreescrever
                 out = new PrintWriter(path);
                 out.println(text);
                 out.close();    
