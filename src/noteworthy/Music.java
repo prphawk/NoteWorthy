@@ -13,21 +13,12 @@ import org.jfugue.pattern.*;
  */
 
 public class Music {
+    private final String text;
     
-    private String text;
-        
-    public static final String DO = "C"; //puramente pela minha vontade de des-gringar essas notas
-    public static final String RE = "D";
-    public static final String MI = "E";
-    public static final String FA = "F";
-    public static final String SOL = "G";
-    public static final String LA = "A";
-    public static final String SI = "B";
     public static final String PAUSE = "R "; //pausa não tem oitava colada, tem espaço no final para separar
     
     public Pattern pattern; //saída
     public String noteString; //nota tocada (concatenada depois com sua oitava)
-    public String octaveString;
     public String instrumentString;
     public String bpmString;
     
@@ -40,7 +31,6 @@ public class Music {
         noteString = PAUSE; //caso a operação seja repetir ultima nota sem nenhuma nota ter sido tocada, emite pausa
         
         //defaults (referências do jfugue):
-        octaveString = "5 "; //oitavas nao estão sendo mais alteradas de acordo com o novo mapeamento dele :// mas cada nota está colada com a sua
         instrumentString = "I0 "; //I + cod do instrumento (esse é o piano)
         bpmString = "T120 "; //T + bpms (agraggio eu acho)
         
@@ -49,7 +39,7 @@ public class Music {
         bpm = 120;
     }
     
-    public Pattern build(){ //constroi uma string personalizada de acordo com os comandos do jfugue
+    public Pattern build() throws Exception{ //constroi uma string personalizada de acordo com os comandos do jfugue
        
         StringBuilder musicString = new StringBuilder(); //para construir a pattern final a partir de uma string formada com StringBuilder
         
@@ -59,13 +49,34 @@ public class Music {
             
             switch(ch){
                 
-                case 'A': musicString.append(setNoteTo(LA)); break;
-                case 'B': musicString.append(setNoteTo(SI)); break;
-                case 'C': musicString.append(setNoteTo(DO)); break;
-                case 'D': musicString.append(setNoteTo(RE)); break;
-                case 'E': musicString.append(setNoteTo(MI)); break;
-                case 'F': musicString.append(setNoteTo(FA)); break;
-                case 'G': musicString.append(setNoteTo(SOL)); break;
+                case 'A':
+                    noteString = (new Note("Lá", octave)).toString();
+                    musicString.append(noteString);
+                    break;
+                case 'B':
+                    noteString = (new Note("Si", octave)).toString();
+                    musicString.append(noteString);
+                    break;
+                case 'C':
+                    noteString = (new Note("Dó", octave)).toString();
+                    musicString.append(noteString);
+                    break;
+                case 'D':
+                    noteString = (new Note("Ré", octave)).toString();
+                    musicString.append(noteString);
+                    break;
+                case 'E':
+                    noteString = (new Note("Mi", octave)).toString();
+                    musicString.append(noteString);
+                    break;
+                case 'F':
+                    noteString = (new Note("Fá", octave)).toString();
+                    musicString.append(noteString);
+                    break;
+                case 'G':
+                    noteString = (new Note("Sol", octave)).toString();
+                    musicString.append(noteString);
+                    break;
                 case 'a':
                 case 'b':
                 case 'c':
@@ -84,7 +95,7 @@ public class Music {
                 case ';': musicString.append(setInstrumentTo(76)); break;
                 case ',': musicString.append(setInstrumentTo(20)); break;
                 case '.':
-                case '?': octave = 5; octaveString = "5 "; break; //volta a oitava e volume (n implementado) default
+                case '?': octave = 5; break; //volta a oitava e volume (n implementado) default
                 
                 case 'T': //n tem bpm mais mas
                     if(text.charAt(i+1) == '+') bpm += 50; 
@@ -123,9 +134,4 @@ public class Music {
         instrument = value; 
         return instrumentString = "I" + instrument + " "; 
     }
-    
-    public String setNoteTo(String note){
-        return noteString = note + octaveString; 
-    }
-
 }

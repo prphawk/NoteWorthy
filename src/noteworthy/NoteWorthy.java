@@ -275,10 +275,14 @@ public class NoteWorthy extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton_BUILDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_BUILDActionPerformed
-        // Operaçao para contruir nova Pattern a partir do texto presente na caixa de texto
-        Music music = new Music(jTextArea.getText()); 
-        pattern = music.build(); //devolve Pattern construida, atribui ela a classe NoteWorthy para ser reproduzida indefinidamente ou até outra pattern ser construida
-        JOptionPane.showMessageDialog(null, "Sucesso"); //aviso (temporário pq eh mt feio) que pode reproduzir pattern em PLAY
+        try {
+            // Operaçao para contruir nova Pattern a partir do texto presente na caixa de texto
+            Music music = new Music(jTextArea.getText());
+            pattern = music.build(); //devolve Pattern construida, atribui ela a classe NoteWorthy para ser reproduzida indefinidamente ou até outra pattern ser construida
+            JOptionPane.showMessageDialog(null, "Sucesso"); //aviso (temporário pq eh mt feio) que pode reproduzir pattern em PLAY
+        } catch (Exception ex) {
+            Logger.getLogger(NoteWorthy.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton_BUILDActionPerformed
 
     private void jButton_DOWNLOADActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_DOWNLOADActionPerformed
