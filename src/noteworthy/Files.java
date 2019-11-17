@@ -61,9 +61,7 @@ public class Files {
         reader.close();
         return stringBuilder.toString(); //caixa de texto com material do arquivo .txt carregado
     }
-    
-
-    
+        
     public void write(File directory, String text, String extension){
         
         String fileName = JOptionPane.showInputDialog(null,"Save file as:", "untitled" + extension);
@@ -80,8 +78,10 @@ public class Files {
 
                 if(newFile.exists() && !newFile.isDirectory()){ //testa se usuário quer sobreescrever arquivo com o mesmo nome
                     int overwrite = JOptionPane.showConfirmDialog(null, "This file already exists. Do you wish to overwrite it?", "Found file",JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-                    if(overwrite == NO) write(directory, text, extension); //se não, repete operação pro usuário salvar com outro nome
-                    else if(overwrite == CANCEL) return;
+                    if(overwrite == NO) {
+                        write(directory, text, extension); return;
+                    } //se não, repete operação pro usuário salvar com outro nome
+                    if(overwrite == CANCEL) return; //existe a opção de cancelar, o "cancelar" e o "nao" precisam retornar se/depoisdo recursivo. o que segue é o "sim" e o que nao entrou nessa clausula
                 }
                 
                 if(".txt".equals(extension)){
