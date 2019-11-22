@@ -6,6 +6,7 @@
 package noteworthy;
 
 import org.jfugue.pattern.*;
+import java.util.Random;
 
 /**
  *
@@ -13,14 +14,23 @@ import org.jfugue.pattern.*;
  */
 
 public class Music {
-    private final String text;
     
+    public static final String DO = "C"; //puramente pela minha vontade de des-gringar essas notas
+    public static final String RE = "D";
+    public static final String MI = "E";
+    public static final String FA = "F";
+    public static final String SOL = "G";
+    public static final String LA = "A";
+    public static final String SI = "B";
     public static final String PAUSE = "R "; //pausa não tem oitava colada, tem espaço no final para separar
     
-    public Pattern pattern; //saída
-    public String noteString; //nota tocada (concatenada depois com sua oitava)
-    public String instrumentString;
-    public String bpmString;
+    private final String text;
+    
+    private Pattern pattern; //saída
+    private String noteString; //nota tocada (concatenada depois com sua oitava)
+    private String octaveString;
+    private String instrumentString;
+    private String bpmString;
     
     private int octave; //valores numéricos para operações
     private int instrument;
@@ -31,6 +41,7 @@ public class Music {
         noteString = PAUSE; //caso a operação seja repetir ultima nota sem nenhuma nota ter sido tocada, emite pausa
         
         //defaults (referências do jfugue):
+        octaveString = "5 "; //oitavas nao estão sendo mais alteradas de acordo com o novo mapeamento dele :// mas cada nota está colada com a sua
         instrumentString = "I0 "; //I + cod do instrumento (esse é o piano)
         bpmString = "T120 "; //T + bpms (agraggio eu acho)
         
@@ -39,7 +50,7 @@ public class Music {
         bpm = 120;
     }
     
-    public Pattern build() throws Exception{ //constroi uma string personalizada de acordo com os comandos do jfugue
+    public Pattern build(){ //constroi uma string personalizada de acordo com os comandos do jfugue
        
         StringBuilder musicString = new StringBuilder(); //para construir a pattern final a partir de uma string formada com StringBuilder
         
@@ -49,68 +60,37 @@ public class Music {
             
             switch(ch){
                 
-                case 'A':
-                    noteString = (new Note("Lá", octave)).toString();
-                    musicString.append(noteString);
-                    break;
-                case 'B':
-                    noteString = (new Note("Si", octave)).toString();
-                    musicString.append(noteString);
-                    break;
-                case 'C':
-                    noteString = (new Note("Dó", octave)).toString();
-                    musicString.append(noteString);
-                    break;
-                case 'D':
-                    noteString = (new Note("Ré", octave)).toString();
-                    musicString.append(noteString);
-                    break;
-                case 'E':
-                    noteString = (new Note("Mi", octave)).toString();
-                    musicString.append(noteString);
-                    break;
-                case 'F':
-                    noteString = (new Note("Fá", octave)).toString();
-                    musicString.append(noteString);
-                    break;
-                case 'G':
-                    noteString = (new Note("Sol", octave)).toString();
-                    musicString.append(noteString);
-                    break;
-                case 'a':
-                case 'b':
-                case 'c':
-                case 'd':
-                case 'e':
-                case 'f':
-                case 'g': musicString.append(noteString); break; //de 'a' até 'g' repete última nota
+                case 'a': musicString.append(setNoteTo(LA)); break;
+                case 'b': musicString.append(setNoteTo(SI)); break;
+                case 'c': musicString.append(setNoteTo(DO)); break;
+                case 'd': musicString.append(setNoteTo(RE)); break;
+                case 'e': musicString.append(setNoteTo(MI)); break;
+                case 'f': musicString.append(setNoteTo(FA)); break;
+                case 'g': musicString.append(setNoteTo(SOL)); break;
                 case ' ': /* aumenta volume*/ break;
                 case '!': musicString.append(setInstrumentTo(114)); break;
                 case 'i':
                 case 'o':
                 case 'u': 
-                case 'I':
-                case 'O': //isso fode as oitavas
-                case 'U': musicString.append(setInstrumentTo(7)); break;
-                case ';': musicString.append(setInstrumentTo(76)); break;
-                case ',': musicString.append(setInstrumentTo(20)); break;
+                case ';': //musicString.append(setInstrumentTo(76)); break;
+                case ',': //musicString.append(setInstrumentTo(20)); break;
                 case '.':
-                case '?': octave = 5; break; //volta a oitava e volume (n implementado) default
+                case '?': octave = 5; octaveString = "5 "; break; //volta a oitava e volume (n implementado) default
                 
                 case 'T': //n tem bpm mais mas
                     if(text.charAt(i+1) == '+') bpm += 50; 
                     if(text.charAt(i+1) == '-' && bpm > 50) bpm -= 50; 
                     bpmString = "T" + bpm + " ";
                     musicString.append(bpmString); break;
-                /*
+                
                 case 'O': 
                     if(text.charAt(i+1) == '+' && octave < 9) octave++;  //de 0 a 9
                     if(text.charAt(i+1) == '-' && octave > 0) octave--;
                     octaveString = octave + " "; break;
-                */    
-                case '\n': musicString.append(setInstrumentTo(15)); break; 
-                    //Random rand = new Random(); //queria instrumentos randomicos antes (0 a 127)
-                    //instrument = 15;rand.nextInt(127); 
+                   
+                case '\n': 
+                    Random rand = new Random(); //queria instrumentos randomicos antes (0 a 127)
+                    musicString.append(setInstrumentTo(rand.nextInt(127))); break; 
                    
                 case '1':
                 case '2':
@@ -134,4 +114,9 @@ public class Music {
         instrument = value; 
         return instrumentString = "I" + instrument + " "; 
     }
+    
+    public String setNoteTo(String note){
+        return noteString = note + octaveString; 
+    }
+
 }

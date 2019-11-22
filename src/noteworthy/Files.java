@@ -35,10 +35,10 @@ public class Files {
         JFileChooser jfc  = new JFileChooser(System.getProperty("user.dir"));
         jfc.setDialogTitle("Select file");
         
-        if(txt_only){
+        if(txt_only){ //se for pra selecionar um arquivo específico
             jfc.setAcceptAllFileFilterUsed(false); //apenas arquivos .txt
             jfc.addChoosableFileFilter(new FileNameExtensionFilter(".txt", "txt"));
-        }
+        } //se for pra selecionar um caminho
         else jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); //selecionar pasta de destino
 
         if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) //operação não cancelada
@@ -62,16 +62,16 @@ public class Files {
         return stringBuilder.toString(); //caixa de texto com material do arquivo .txt carregado
     }
         
-    public void write(File directory, String text, String extension){
+    public void write(File directory, String text, String fileType){
         
-        String fileName = JOptionPane.showInputDialog(null,"Save file as:", "untitled" + extension);
+        String fileName = JOptionPane.showInputDialog(null,"Save file as:", "untitled" + fileType);
 
         if (fileName != null){ //operação nao cancelada
         
             try {
 
                 if (fileName.lastIndexOf('.') == NOT_FOUND) 
-                    fileName = fileName.concat(extension); //checa extensão no nome salvo
+                    fileName = fileName.concat(fileType); //checa extensão no nome salvo
 
                 String path = directory.getPath() + "\\" + fileName; //constroi caminho para novo arquivo 
                 File newFile = new File(path);
@@ -79,18 +79,18 @@ public class Files {
                 if(newFile.exists() && !newFile.isDirectory()){ //testa se usuário quer sobreescrever arquivo com o mesmo nome
                     int overwrite = JOptionPane.showConfirmDialog(null, "This file already exists. Do you wish to overwrite it?", "Found file",JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
                     if(overwrite == NO) {
-                        write(directory, text, extension); return;
+                        write(directory, text, fileType); return;
                     } //se não, repete operação pro usuário salvar com outro nome
                     if(overwrite == CANCEL) return; //existe a opção de cancelar, o "cancelar" e o "nao" precisam retornar se/depoisdo recursivo. o que segue é o "sim" e o que nao entrou nessa clausula
                 }
                 
-                if(".txt".equals(extension)){
+                if(".txt".equals(fileType)){
                     PrintWriter out; //se usuário resolveu sobreescrever
                     out = new PrintWriter(path);
                     out.println(text);
                     out.close();  
                 }
-                if (".midi".equals(extension)){
+                if (".midi".equals(fileType)){
                         /* essa eh o método pra salvar pattern em arquivo MIDI mas aparentemente ele nao existe mais
                     Player player = new Player();
                     Pattern pattern = new Pattern(text); 

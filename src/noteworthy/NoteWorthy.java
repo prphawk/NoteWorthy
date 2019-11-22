@@ -4,19 +4,13 @@
  * and open the template in the editor.
  */
 package noteworthy;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileNameExtensionFilter;
+
 import java.io.IOException;
-import java.io.FileReader;
-import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import java.io.File;
 import org.jfugue.player.*;
-import org.jfugue.theory.*;
 import org.jfugue.pattern.*;
 
 
@@ -34,9 +28,6 @@ public class NoteWorthy extends javax.swing.JFrame {
         pattern = null;
     }
     
-    private static final int NOT_FOUND = -1;
-    private static final int NO = 1;
-    private static final int CANCEL = 2;
     private Pattern pattern;
 
     /**
@@ -133,13 +124,12 @@ public class NoteWorthy extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        jTextArea.setBackground(new java.awt.Color(255, 255, 255));
         jTextArea.setColumns(20);
         jTextArea.setFont(new java.awt.Font("Monospaced", 0, 18)); // NOI18N
         jTextArea.setForeground(new java.awt.Color(102, 102, 102));
         jTextArea.setLineWrap(true);
         jTextArea.setRows(5);
-        jTextArea.setText("SPHINX OF BLACK QUARTZ, JUDGE MY VOW.");
+        jTextArea.setText("Sphinx of black quartz, judge my vow.");
         jTextArea.setToolTipText("");
         jTextArea.setWrapStyleWord(true);
         jTextArea.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -181,14 +171,14 @@ public class NoteWorthy extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 698, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton_PLAY, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(jButton_DOWNLOAD)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton_BUILD, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton_DOWNLOAD)
-                        .addGap(6, 6, 6)))
+                        .addComponent(jButton_PLAY, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(12, 12, 12)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -211,11 +201,6 @@ public class NoteWorthy extends javax.swing.JFrame {
         jMenu_FILE.setForeground(new java.awt.Color(102, 102, 102));
         jMenu_FILE.setText("File");
         jMenu_FILE.setFont(new java.awt.Font("Dialog", 1, 13)); // NOI18N
-        jMenu_FILE.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenu_FILEActionPerformed(evt);
-            }
-        });
 
         jMenuItem_IMPORT.setText("Import .txt file");
         jMenuItem_IMPORT.addActionListener(new java.awt.event.ActionListener() {
@@ -239,16 +224,11 @@ public class NoteWorthy extends javax.swing.JFrame {
         jMenu_HELP.setForeground(new java.awt.Color(102, 102, 102));
         jMenu_HELP.setText("Help");
         jMenu_HELP.setFont(new java.awt.Font("Dialog", 1, 13)); // NOI18N
-        jMenu_HELP.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenu_HELPActionPerformed(evt);
-            }
-        });
 
         jMenuItem_HELP.setText("Show char map");
         jMenuItem_HELP.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem_HELPActionPerformed(evt);
+                jMenuItem_CHARMAPActionPerformed(evt);
             }
         });
         jMenu_HELP.add(jMenuItem_HELP);
@@ -293,22 +273,13 @@ public class NoteWorthy extends javax.swing.JFrame {
             //file.write(directory, jTextArea.getText(), ".midi"); //depois corrijo atributos
     }//GEN-LAST:event_jButton_DOWNLOADActionPerformed
 
-    private void jMenu_FILEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu_FILEActionPerformed
-        // TODO add your handling code here:   
-    }//GEN-LAST:event_jMenu_FILEActionPerformed
-
-    private void jMenu_HELPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu_HELPActionPerformed
-        // TODO add your handling code here:
-        
-    }//GEN-LAST:event_jMenu_HELPActionPerformed
-
     private void jMenuItem_IMPORTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_IMPORTActionPerformed
         // operação de importação de arquivo .txt
-        Files file = new Files();
-        File directory = file.selectFile(true);
+        Files files = new Files();
+        File directory = files.selectFile(true);
         if(directory != null){
             try {
-                jTextArea.setText(file.read(directory));
+                jTextArea.setText(files.read(directory));
             } catch (IOException ex) {
                 Logger.getLogger(NoteWorthy.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -316,16 +287,16 @@ public class NoteWorthy extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem_IMPORTActionPerformed
 
     private void jMenuItem_EXPORTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_EXPORTActionPerformed
-        Files file = new Files();
-        File directory = file.selectFile(false);
+        Files files = new Files();
+        File directory = files.selectFile(false);
         if(directory != null)
-            file.write(directory, jTextArea.getText(), ".txt");
+            files.write(directory, jTextArea.getText(), ".txt");
     }//GEN-LAST:event_jMenuItem_EXPORTActionPerformed
 
-    private void jMenuItem_HELPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_HELPActionPerformed
+    private void jMenuItem_CHARMAPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_CHARMAPActionPerformed
         // TODO add your handling code here:
         jTable_MAPEAMENTO.setVisible(true);
-    }//GEN-LAST:event_jMenuItem_HELPActionPerformed
+    }//GEN-LAST:event_jMenuItem_CHARMAPActionPerformed
 
     private void jButton_PLAYActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_PLAYActionPerformed
         // Toca o Pattern (do JFugue) já construído por Music e atribuido em NoteWorthy
@@ -360,7 +331,7 @@ public class NoteWorthy extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(NoteWorthy.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold> //nimbus ou metal?
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
