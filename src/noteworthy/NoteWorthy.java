@@ -272,7 +272,7 @@ public class NoteWorthy extends javax.swing.JFrame {
         File directory = file.selectFile(false);
         if(directory != null){
             try {
-                file.write(directory, jTextArea.getText(), ".midi");
+                file.write(directory, jTextArea.getText(), pattern, ".midi");
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(NoteWorthy.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -297,7 +297,7 @@ public class NoteWorthy extends javax.swing.JFrame {
         File directory = files.selectFile(false);
         if(directory != null)
             try {
-                files.write(directory, jTextArea.getText(), ".txt");
+                files.write(directory, jTextArea.getText(), pattern, ".txt");
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(NoteWorthy.class.getName()).log(Level.SEVERE, null, ex);
             }
