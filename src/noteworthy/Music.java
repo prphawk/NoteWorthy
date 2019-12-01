@@ -25,7 +25,6 @@ public class Music {
     public static final String PAUSE = "R "; //pausa não tem oitava colada, tem espaço no final para separar
     
     private final String text;
-    
     private Pattern pattern; //saída
     private String noteString; //nota tocada (concatenada depois com sua oitava)
     private String octaveString;
@@ -67,29 +66,30 @@ public class Music {
                 case 'e': musicString.append(setNoteTo(MI)); break;
                 case 'f': musicString.append(setNoteTo(FA)); break;
                 case 'g': musicString.append(setNoteTo(SOL)); break;
-                case ' ': /* aumenta volume*/ break;
-                case '!': musicString.append(setInstrumentTo(114)); break;
+                case ' ': musicString.append(PAUSE); break;
                 case 'i':
                 case 'o':
-                case 'u': 
-                case ';': //musicString.append(setInstrumentTo(76)); break;
-                case ',': //musicString.append(setInstrumentTo(20)); break;
+                case 'u': musicString.append(noteString); break;
+                case ';': 
                 case '.':
                 case '?': octave = 5; octaveString = "5 "; break; //volta a oitava e volume (n implementado) default
                 
-                case 'T': //n tem bpm mais mas
+                case '+':
+                case '-': /*volume aqui*/ break;
+                
+                case 'T':
                     if(text.charAt(i+1) == '+') bpm += 50; 
                     if(text.charAt(i+1) == '-' && bpm > 50) bpm -= 50; 
                     bpmString = "T" + bpm + " ";
-                    musicString.append(bpmString); break;
+                    musicString.append(bpmString); i++; break;
                 
                 case 'O': 
                     if(text.charAt(i+1) == '+' && octave < 9) octave++;  //de 0 a 9
                     if(text.charAt(i+1) == '-' && octave > 0) octave--;
-                    octaveString = octave + " "; break;
+                    octaveString = octave + " "; i++; break;
                    
                 case '\n': 
-                    Random rand = new Random(); //queria instrumentos randomicos antes (0 a 127)
+                    Random rand = new Random();
                     musicString.append(setInstrumentTo(rand.nextInt(127))); break; 
                    
                 case '1':
@@ -100,7 +100,7 @@ public class Music {
                 case '6':
                 case '7':
                 case '8':
-                case '9': musicString.append(setInstrumentTo(instrument+Character.getNumericValue(ch))); break; //regra do maps
+                case '9': musicString.append(setInstrumentTo(instrument+Character.getNumericValue(ch))); break;
                     
                 default: musicString.append(noteString); break;
 
