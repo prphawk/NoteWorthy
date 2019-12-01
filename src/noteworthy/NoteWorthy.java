@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import java.io.File;
+import java.io.FileNotFoundException;
 import org.jfugue.player.*;
 import org.jfugue.pattern.*;
 
@@ -269,8 +270,13 @@ public class NoteWorthy extends javax.swing.JFrame {
         //Operação para salvar Pattern construida em arquivo MIDI
         Files file = new Files();
         File directory = file.selectFile(false);
-        //if(directory != null)
-            //file.write(directory, jTextArea.getText(), ".midi"); //depois corrijo atributos
+        if(directory != null){
+            try {
+                file.write(directory, jTextArea.getText(), ".midi");
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(NoteWorthy.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }//GEN-LAST:event_jButton_DOWNLOADActionPerformed
 
     private void jMenuItem_IMPORTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_IMPORTActionPerformed
@@ -290,7 +296,11 @@ public class NoteWorthy extends javax.swing.JFrame {
         Files files = new Files();
         File directory = files.selectFile(false);
         if(directory != null)
-            files.write(directory, jTextArea.getText(), ".txt");
+            try {
+                files.write(directory, jTextArea.getText(), ".txt");
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(NoteWorthy.class.getName()).log(Level.SEVERE, null, ex);
+            }
     }//GEN-LAST:event_jMenuItem_EXPORTActionPerformed
 
     private void jMenuItem_CHARMAPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_CHARMAPActionPerformed

@@ -66,11 +66,11 @@ public class Music {
                 case 'e': musicString.append(setNoteTo(MI)); break;
                 case 'f': musicString.append(setNoteTo(FA)); break;
                 case 'g': musicString.append(setNoteTo(SOL)); break;
-                case ' ': musicString.append(PAUSE); break;
+                case ' ': 
                 case 'i':
                 case 'o':
                 case 'u': musicString.append(noteString); break;
-                case ';': 
+                case ';': musicString.append(PAUSE); break;
                 case '.':
                 case '?': octave = 5; octaveString = "5 "; break; //volta a oitava e volume (n implementado) default
                 
@@ -102,7 +102,7 @@ public class Music {
                 case '8':
                 case '9': musicString.append(setInstrumentTo(instrument+Character.getNumericValue(ch))); break;
                     
-                default: musicString.append(noteString); break;
+                //default: musicString.append(noteString); break;
 
             }
         }

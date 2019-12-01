@@ -16,6 +16,9 @@ import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import org.jfugue.player.*;
+import org.jfugue.pattern.*;
+import org.jfugue.midi.*;
 
 /**
  *
@@ -62,14 +65,12 @@ public class Files {
         return stringBuilder.toString(); //caixa de texto com material do arquivo .txt carregado
     }
         
-    public void write(File directory, String text, String fileType){
+    public void write(File directory, String text, String fileType) throws FileNotFoundException{
         
         String fileName = JOptionPane.showInputDialog(null,"Save file as:", "untitled" + fileType);
 
         if (fileName != null){ //operação nao cancelada
         
-            try {
-
                 if (fileName.lastIndexOf('.') == NOT_FOUND) 
                     fileName = fileName.concat(fileType); //checa extensão no nome salvo
 
@@ -84,29 +85,32 @@ public class Files {
                     if(overwrite == CANCEL) return; //existe a opção de cancelar, o "cancelar" e o "nao" precisam retornar se/depoisdo recursivo. o que segue é o "sim" e o que nao entrou nessa clausula
                 }
                 
-                if(".txt".equals(fileType)){
-                    PrintWriter out; //se usuário resolveu sobreescrever
-                    out = new PrintWriter(path);
-                    out.println(text);
-                    out.close();  
-                }
-                if (".midi".equals(fileType)){
-                        /* essa eh o método pra salvar pattern em arquivo MIDI mas aparentemente ele nao existe mais
-                    Player player = new Player();
-                    Pattern pattern = new Pattern(text); 
-                    try {
-                        MidiFileManager.savePatternToMidi(pattern, new File("JFugue4.mid"));
-                    } catch (IOException e)
-                    {
-                    // handle IO Exception
-                    }*/
-                }
-                
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(NoteWorthy.class.getName()).log(Level.SEVERE, null, ex);
-            }
+                if(".txt".equals(fileType)) 
+                    writeText(path, text);
+                else if (".midi".equals(fileType))
+                    writeMidi(newFile, text);
         }
     }
     
+        
+    private void writeText(String path, String text) throws FileNotFoundException{
+
+            PrintWriter out; //se usuário resolveu sobreescrever
+            out = new PrintWriter(path);
+            out.println(text);
+            out.close();  
+    }
     
+    private void writeMidi(File newFile, String text){
+        
+        //essa eh o método pra salvar pattern em arquivo MIDI mas aparentemente ele nao existe mais
+        Player player = new Player();
+        Pattern pattern = new Pattern(text); 
+        try {
+            MidiFileManager.savePatternToMidi(pattern, newFile);
+        } catch (IOException ex)
+        {
+            Logger.getLogger(NoteWorthy.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }
