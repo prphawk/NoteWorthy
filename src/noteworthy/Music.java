@@ -15,45 +15,49 @@ import java.util.Random;
 
 public class Music {
     
-    public static final String DO = "C"; //puramente pela minha vontade de des-gringar essas notas
+    public static final String DO = "C";                                        //puramente pela minha vontade de des-gringar essas notas
     public static final String RE = "D";
     public static final String MI = "E";
     public static final String FA = "F";
     public static final String SOL = "G";
     public static final String LA = "A";
     public static final String SI = "B";
-    public static final String PAUSE = "R "; //pausa não tem oitava colada, tem espaço no final para separar
+    public static final String PAUSE = "R ";                                    //pausa não tem oitava colada, tem espaço no final para separar
     
-    private final String text;
-    private Pattern pattern; //saída
-    private String noteString; //nota tocada (concatenada depois com sua oitava)
-    private String octaveString;
-    private String instrumentString;
-    private String bpmString;
+    private static final int OCTAVE_DEFAULT = 5;                                //5ª oitava
+    private static final int INSTRUMENT_DEFAULT = 0;                            //piano
+    private static final int BPM_DEFAULT = 120;                                 //agraggio
     
-    private int octave; //valores numéricos para operações
+    private int octave;                                                         //valores numéricos para operações
     private int instrument;
     private int bpm;
+    
+    private String text;
+    private String noteString;                                                  //nota tocada
+    private String octaveString;                                                //nota é concatenada com sua oitava
+    private String instrumentString;                                            //I + cod do instrumento
+    private String bpmString;                                                   //T + bpms
+    
   
-    public Music(String text){
-        this.text = text; //texto recebido
-        noteString = PAUSE; //caso a operação seja repetir ultima nota sem nenhuma nota ter sido tocada, emite pausa
+    public Music(String aText){
         
-        //defaults (referências do jfugue):
-        octaveString = "5 "; //oitavas nao estão sendo mais alteradas de acordo com o novo mapeamento dele :// mas cada nota está colada com a sua
-        instrumentString = "I0 "; //I + cod do instrumento (esse é o piano)
-        bpmString = "T120 "; //T + bpms (agraggio eu acho)
+        text = aText;                                                           //texto a ser formatado de acordo com os comandos do jfugue 
+                
+        octave = OCTAVE_DEFAULT;                                                //5
+        instrument = INSTRUMENT_DEFAULT;                                        //0
+        bpm = BPM_DEFAULT;                                                      //120
         
-        octave = 5;
-        instrument = 0;
-        bpm = 120;
+        noteString = PAUSE;                                                     //caso a operação seja repetir ultima nota sem nenhuma nota ter sido tocada, emite pausa -> "R "
+        octaveString = OCTAVE_DEFAULT + " ";                                    //printar na string final nota + oitava (exceto para PAUSE) + espaço para separar comandos -> "5 "
+        instrumentString = "I" + INSTRUMENT_DEFAULT + " ";                      //printar na string final I + codigo do intrumento + espaço para separar comandos -> "I0 "
+        bpmString = "T" + BPM_DEFAULT + " ";                                    //printar na string final T + bpms + espaço para separar comandos -> "T120 "
     }
     
-    public Pattern build(){ //constroi uma string personalizada de acordo com os comandos do jfugue
+    public Pattern build(){                                                     //constroi uma string personalizada de acordo com os comandos do jfugue
        
-        StringBuilder musicString = new StringBuilder(); //para construir a pattern final a partir de uma string formada com StringBuilder
+        StringBuilder musicString = new StringBuilder();                        //para construir a pattern final a partir de uma string formada com StringBuilder
         
-        for (int i = 0; i < text.length(); i++) { //cada char do texto
+        for (int i = 0; i < text.length(); i++) {                               //cada char do texto
             
             char ch = text.charAt(i);
             
@@ -69,10 +73,13 @@ public class Music {
                 case ' ': 
                 case 'i':
                 case 'o':
-                case 'u': musicString.append(noteString); break;
+                case 'u': musicString.append(noteString); break;                //printa na string final a ultima nota tocada
                 case ';': musicString.append(PAUSE); break;
+                
                 case '.':
-                case '?': octave = 5; octaveString = "5 "; break; //volta a oitava e volume (n implementado) default
+                case '?': 
+                    octave = OCTAVE_DEFAULT; 
+                    octaveString = OCTAVE_DEFAULT + " "; break;                 //volta a oitava e volume (n implementado) default
                 
                 case '+':
                 case '-': /*volume aqui*/ break;
@@ -84,7 +91,7 @@ public class Music {
                     musicString.append(bpmString); i++; break;
                 
                 case 'O': 
-                    if(text.charAt(i+1) == '+' && octave < 9) octave++;  //de 0 a 9
+                    if(text.charAt(i+1) == '+' && octave < 9) octave++;         //de 0 a 9
                     if(text.charAt(i+1) == '-' && octave > 0) octave--;
                     octaveString = octave + " "; i++; break;
                    
@@ -100,22 +107,23 @@ public class Music {
                 case '6':
                 case '7':
                 case '8':
-                case '9': musicString.append(setInstrumentTo(instrument+Character.getNumericValue(ch))); break;
+                case '9': 
+                    int chValue = Character.getNumericValue(ch);
+                    musicString.append(setInstrumentTo(instrument+chValue)); break;
                     
                 //default: musicString.append(noteString); break;
 
             }
         }
+        return new Pattern(musicString.toString());                             //retorna nova Pattern construida
+    }
 
-        return pattern = new Pattern(musicString.toString()); //retorna nova Pattern construida
-        }
-
-    public String setInstrumentTo(int value){ //para mudar um instrumento na String pro jfugue eh "I + valor do instrumento" uma vez
+    private String setInstrumentTo(int value){ 
         instrument = value; 
         return instrumentString = "I" + instrument + " "; 
     }
     
-    public String setNoteTo(String note){
+    private String setNoteTo(String note){
         return noteString = note + octaveString; 
     }
 

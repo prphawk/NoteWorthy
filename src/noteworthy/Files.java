@@ -25,115 +25,90 @@ import org.jfugue.midi.*;
  */
 public class Files {
     
-    private static final int NOT_FOUND = -1;
+    private static final int NOT_FOUND = -1;                                    //constantes para o comando de sobreescrever arquivos
     private static final int NO = 1;
-    private static final int CANCEL = 2;
+           
     
-    private static String text;
-    private static Pattern pattern;
-    
-    public Files(){
+    public String read() throws IOException{
         
-        text = null;
-        pattern = null;
+        File file = selectFile(true);
+
+        if(file != null){
+            StringBuilder stringBuilder = new StringBuilder();                  //para construir string final
+            BufferedReader reader = new BufferedReader(new FileReader(file));   //seleciona arquivo para ser lido
+            String paragraph;                                                
+
+            while((paragraph = reader.readLine()) != null)                      //lê parágrafos inteiros (até seus \n) até acabar arquivo
+                stringBuilder.append(paragraph).append("\n");                   //separa parágrafos novamente para saída
+
+            reader.close();
+            return stringBuilder.toString();                                    //retorna única String do arquivo .txt carregado
+        }
+        
+        return null;
     }
     
-    public Files(String aText, Pattern aPattern){
-        text = aText;
-        pattern = aPattern;
+    public void write(String text) throws FileNotFoundException{
+
+        File file = makeFile(".txt");                                           
+        PrintWriter out;                                                        
+        out = new PrintWriter(file.getPath());
+        out.println(text);
+        out.close();  
     }
     
-    public static String getText() {
-        return text;
-    }
-
-    public static void setText(String aText) {
-        text = aText;
-    }
-
-    public static Pattern getPattern() {
-        return pattern;
-    }
-
-    public static void setPattern(Pattern aPattern) {
-        pattern = aPattern;
+    public void write(Pattern pattern) throws IOException{
+        
+        File file = makeFile(".midi");                                          
+        MidiFileManager.savePatternToMidi(pattern, file);
     }
     
-    public File selectFile(boolean fileOnly){
+    private File selectFile(boolean fileOnly){
         
         JFileChooser jfc  = new JFileChooser(System.getProperty("user.dir"));
         jfc.setDialogTitle("Select file");
         
-        if(fileOnly){ //se for pra selecionar um arquivo específico
-            jfc.setAcceptAllFileFilterUsed(false); //apenas arquivos .txt
+        if(fileOnly){                                                           //se for pra selecionar um arquivo específico
+                                                                                
+            jfc.setAcceptAllFileFilterUsed(false);                              //apenas arquivos .txt
             jfc.addChoosableFileFilter(new FileNameExtensionFilter(".txt", "txt"));
-        } //se for pra selecionar um caminho
-        else jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); //selecionar pasta de destino
+        }                                                                       //se for pra selecionar um caminho
+        else jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);           //selecionar pasta de destino
 
-        if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) //operação não cancelada
+        if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)            //operação não cancelada
             return jfc.getSelectedFile();
         
         return null;
     }
     
-    public String read(File file) throws IOException{
+    private String buildPath(File directory, String fileName, String fileType){
+        
+        if (fileName == null)
+            fileName = "untitled" + fileType;
+        
+        if (fileName.lastIndexOf('.') == NOT_FOUND) 
+            fileName = fileName.concat(fileType);                               //checa extensão no nome salvo (da pra fazer melhor mas preguiça)
 
-        BufferedReader reader = null; //precisa
-        StringBuilder stringBuilder = new StringBuilder(); //para construir string final
-
-        reader = new BufferedReader(new FileReader(file)); //seleciona arquivo para ser lido
-        String paragraph = null; //inicializa string do buffer
-
-        while((paragraph = reader.readLine()) != null) //lê parágrafos inteiros (até seus \n) até acabar arquivo
-            stringBuilder.append(paragraph).append("\n"); //separa parágrafos novamente para saída
-
-        reader.close();
-        return stringBuilder.toString(); //caixa de texto com material do arquivo .txt carregado
+        return directory.getPath() + "\\" + fileName;                           //constroi caminho para novo arquivo
     }
         
-    public void write(File directory, String text, Pattern pattern, String fileType) throws FileNotFoundException{
+    private File makeFile(String fileType){
         
-        String fileName = JOptionPane.showInputDialog(null,"Save file as:", "untitled" + fileType);
-
-        if (fileName != null){ //operação nao cancelada
+        int overwrite;                                                          //flag para repetir operação de nomeção do arquivo
+        File directory = selectFile(false);                                     //seleciona o diretório onde quer escrever o novo arquivo
+        File file = null;
         
-                if (fileName.lastIndexOf('.') == NOT_FOUND) 
-                    fileName = fileName.concat(fileType); //checa extensão no nome salvo
+        do{
+            overwrite = NOT_FOUND;
+            String fileName = JOptionPane.showInputDialog(null,"Save file as:", "untitled" + fileType);
+            file = new File(buildPath(directory, fileName, fileType));
 
-                String path = directory.getPath() + "\\" + fileName; //constroi caminho para novo arquivo 
-                File newFile = new File(path);
-
-                if(newFile.exists() && !newFile.isDirectory()){ //testa se usuário quer sobreescrever arquivo com o mesmo nome
-                    int overwrite = JOptionPane.showConfirmDialog(null, "This file already exists. Do you wish to overwrite it?", "Found file",JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-                    if(overwrite == NO) {
-                        write(directory, text, pattern, fileType); return;
-                    } //se não, repete operação pro usuário salvar com outro nome
-                    if(overwrite == CANCEL) return; //existe a opção de cancelar, o "cancelar" e o "nao" precisam retornar se/depoisdo recursivo. o que segue é o "sim" e o que nao entrou nessa clausula
-                }
-                
-                if(".txt".equals(fileType)) 
-                    writeText(path, text);
-                else if (".midi".equals(fileType))
-                    writeMidi(newFile, pattern);
-        }
+            if(file.exists() && !file.isDirectory())                            //testa se usuário quer sobreescrever arquivo com o mesmo nome
+                overwrite = JOptionPane.showConfirmDialog(null, "This file already exists. Do you wish to overwrite it?", "Found file",JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        
+        } while(overwrite == NO);                                               //se foi encontrada outro arquivo de mesmo nome e o usuário não quer sobreescrever, repete operação pra salvar com outro nome
+        
+        return file;
     }
     
-        
-    private void writeText(String path, String text) throws FileNotFoundException{
-
-        PrintWriter out; //se usuário resolveu sobreescrever
-        out = new PrintWriter(path);
-        out.println(text);
-        out.close();  
-    }
-    
-    private void writeMidi(File newFile, Pattern pattern){
-         
-        try {
-            MidiFileManager.savePatternToMidi(pattern, newFile);
-        } catch (IOException ex){
-            Logger.getLogger(NoteWorthy.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
 }

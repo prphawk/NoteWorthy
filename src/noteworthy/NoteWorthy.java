@@ -5,6 +5,7 @@
  */
 package noteworthy;
 
+import java.awt.HeadlessException;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,13 +25,13 @@ public class NoteWorthy extends javax.swing.JFrame {
     /**
      * Creates new form NoteWorthy
      */
+    private Pattern pattern;
+    
     public NoteWorthy() {
         initComponents();
         pattern = null;
     }
     
-    private Pattern pattern;
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -256,60 +257,54 @@ public class NoteWorthy extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton_BUILDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_BUILDActionPerformed
+    // Operaçao para contruir nova Pattern a partir do texto presente na caixa de texto
         try {
-            // Operaçao para contruir nova Pattern a partir do texto presente na caixa de texto
             Music music = new Music(jTextArea.getText());
-            pattern = music.build(); //devolve Pattern construida, atribui ela a classe NoteWorthy para ser reproduzida indefinidamente ou até outra pattern ser construida
-            JOptionPane.showMessageDialog(null, "Sucesso"); //aviso (temporário pq eh mt feio) que pode reproduzir pattern em PLAY
-        } catch (Exception ex) {
+            pattern = music.build();                                            //devolve Pattern construida, atribui ela a classe NoteWorthy para ser reproduzida indefinidamente ou até outra pattern ser construida
+            JOptionPane.showMessageDialog(null, "Sucesso");                     //aviso (temporário pq eh mt feio) que pode reproduzir pattern em PLAY
+        } catch (HeadlessException ex) {
             Logger.getLogger(NoteWorthy.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton_BUILDActionPerformed
 
     private void jButton_DOWNLOADActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_DOWNLOADActionPerformed
-        //Operação para salvar Pattern construida em arquivo MIDI
-        Files file = new Files();
-        File directory = file.selectFile(false);
-        if(directory != null){
-            try {
-                file.write(directory, jTextArea.getText(), pattern, ".midi");
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(NoteWorthy.class.getName()).log(Level.SEVERE, null, ex);
-            }
+    //Operação para salvar Pattern construida em arquivo MIDI    
+        Files files = new Files();
+        try {
+            files.write(pattern);
+        } catch (IOException ex) {
+            Logger.getLogger(NoteWorthy.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton_DOWNLOADActionPerformed
 
     private void jMenuItem_IMPORTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_IMPORTActionPerformed
-        // operação de importação de arquivo .txt
+    // Operação de importação do conteúdo de arquivo .txt para caixa de texto
         Files files = new Files();
-        File directory = files.selectFile(true);
-        if(directory != null){
-            try {
-                jTextArea.setText(files.read(directory));
-            } catch (IOException ex) {
-                Logger.getLogger(NoteWorthy.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        try {
+            String textFromFile = files.read();
+            if(textFromFile != null) 
+                jTextArea.setText(textFromFile);
+        } catch (IOException ex) {
+            Logger.getLogger(NoteWorthy.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jMenuItem_IMPORTActionPerformed
 
     private void jMenuItem_EXPORTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_EXPORTActionPerformed
+    // Operação de exportação de arquivo .txt
         Files files = new Files();
-        File directory = files.selectFile(false);
-        if(directory != null)
-            try {
-                files.write(directory, jTextArea.getText(), pattern, ".txt");
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(NoteWorthy.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        try {
+            files.write(jTextArea.getText());
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(NoteWorthy.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jMenuItem_EXPORTActionPerformed
 
     private void jMenuItem_CHARMAPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_CHARMAPActionPerformed
-        // TODO add your handling code here:
         jTable_MAPEAMENTO.setVisible(true);
     }//GEN-LAST:event_jMenuItem_CHARMAPActionPerformed
 
     private void jButton_PLAYActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_PLAYActionPerformed
-        // Toca o Pattern (do JFugue) já construído por Music e atribuido em NoteWorthy
+    // Toca o Pattern (do JFugue) já construído por Music e atribuido em NoteWorthy
         if(pattern != null){
             Player player = new Player();
             player.play(pattern);
