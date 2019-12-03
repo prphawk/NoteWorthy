@@ -15,15 +15,18 @@ import java.util.Random;
 
 public class Music {
     
-    public static final String DO = "C";                                        //puramente pela minha vontade de des-gringar essas notas
-    public static final String RE = "D";
-    public static final String MI = "E";
-    public static final String FA = "F";
-    public static final String SOL = "G";
-    public static final String LA = "A";
-    public static final String SI = "B";
-    public static final String PAUSE = "R ";                                    //pausa não tem oitava colada, tem espaço no final para separar
-    
+    public static class Note{
+
+        public static final String DO = "C";                                    //puramente pela minha vontade de des-gringar essas notas
+        public static final String RE = "D";
+        public static final String MI = "E";
+        public static final String FA = "F";
+        public static final String SOL = "G";
+        public static final String LA = "A";
+        public static final String SI = "B";
+        public static final String PAUSE = "R ";                                //pausa não tem oitava colada, tem espaço no final para separar
+    }
+
     private static final int OCTAVE_DEFAULT = 5;                                //5ª oitava
     private static final int INSTRUMENT_DEFAULT = 0;                            //piano
     private static final int BPM_DEFAULT = 120;                                 //agraggio
@@ -33,24 +36,16 @@ public class Music {
     private int bpm;
     
     private String text;
-    private String noteString;                                                  //nota tocada
-    private String octaveString;                                                //nota é concatenada com sua oitava
-    private String instrumentString;                                            //I + cod do instrumento
-    private String bpmString;                                                   //T + bpms
-    
+    private String noteString;                                                  //ultima nota tocada    
   
+    
     public Music(String aText){
         
         text = aText;                                                           //texto a ser formatado de acordo com os comandos do jfugue 
-                
         octave = OCTAVE_DEFAULT;                                                //5
         instrument = INSTRUMENT_DEFAULT;                                        //0
         bpm = BPM_DEFAULT;                                                      //120
-        
-        noteString = PAUSE;                                                     //caso a operação seja repetir ultima nota sem nenhuma nota ter sido tocada, emite pausa -> "R "
-        octaveString = OCTAVE_DEFAULT + " ";                                    //printar na string final nota + oitava (exceto para PAUSE) + espaço para separar comandos -> "5 "
-        instrumentString = "I" + INSTRUMENT_DEFAULT + " ";                      //printar na string final I + codigo do intrumento + espaço para separar comandos -> "I0 "
-        bpmString = "T" + BPM_DEFAULT + " ";                                    //printar na string final T + bpms + espaço para separar comandos -> "T120 "
+        noteString = Note.PAUSE;                                                //caso a operação seja repetir ultima nota sem nenhuma nota ter sido tocada, emite pausa -> "R "
     }
     
     public Pattern build(){                                                     //constroi uma string personalizada de acordo com os comandos do jfugue
@@ -63,37 +58,34 @@ public class Music {
             
             switch(ch){
                 
-                case 'a': musicString.append(setNoteTo(LA)); break;
-                case 'b': musicString.append(setNoteTo(SI)); break;
-                case 'c': musicString.append(setNoteTo(DO)); break;
-                case 'd': musicString.append(setNoteTo(RE)); break;
-                case 'e': musicString.append(setNoteTo(MI)); break;
-                case 'f': musicString.append(setNoteTo(FA)); break;
-                case 'g': musicString.append(setNoteTo(SOL)); break;
+                case 'a': musicString.append(setNoteTo(Note.LA)); break;
+                case 'b': musicString.append(setNoteTo(Note.SI)); break;
+                case 'c': musicString.append(setNoteTo(Note.DO)); break;
+                case 'd': musicString.append(setNoteTo(Note.RE)); break;
+                case 'e': musicString.append(setNoteTo(Note.MI)); break;
+                case 'f': musicString.append(setNoteTo(Note.FA)); break;
+                case 'g': musicString.append(setNoteTo(Note.SOL)); break;
                 case ' ': 
                 case 'i':
                 case 'o':
                 case 'u': musicString.append(noteString); break;                //printa na string final a ultima nota tocada
-                case ';': musicString.append(PAUSE); break;
+                case ';': musicString.append(Note.PAUSE); break;
                 
                 case '.':
-                case '?': 
-                    octave = OCTAVE_DEFAULT; 
-                    octaveString = OCTAVE_DEFAULT + " "; break;                 //volta a oitava e volume (n implementado) default
+                case '?': octave = OCTAVE_DEFAULT; break;                       //volta a oitava e volume (n implementado) default
                 
                 case '+':
                 case '-': /*volume aqui*/ break;
                 
                 case 'T':
-                    if(text.charAt(i+1) == '+') bpm += 50; 
-                    if(text.charAt(i+1) == '-' && bpm > 50) bpm -= 50; 
-                    bpmString = "T" + bpm + " ";
-                    musicString.append(bpmString); i++; break;
+                    if(text.charAt(i+1) == '+') musicString.append(setBPMTo(bpm+50));
+                    if(text.charAt(i+1) == '-') musicString.append(setBPMTo(bpm-50));
+                    i++; break;
                 
                 case 'O': 
                     if(text.charAt(i+1) == '+' && octave < 9) octave++;         //de 0 a 9
                     if(text.charAt(i+1) == '-' && octave > 0) octave--;
-                    octaveString = octave + " "; i++; break;
+                    i++; break;
                    
                 case '\n': 
                     Random rand = new Random();
@@ -118,13 +110,20 @@ public class Music {
         return new Pattern(musicString.toString());                             //retorna nova Pattern construida
     }
 
-    private String setInstrumentTo(int value){ 
-        instrument = value; 
-        return instrumentString = "I" + instrument + " "; 
+    private String setBPMTo(int value){
+        if(bpm > 50)
+            bpm = value;
+        return "T" + bpm + " ";
+    }
+    
+    private String setInstrumentTo(int value){
+        if (value < 128)
+            instrument = value; 
+        return "I" + instrument + " "; 
     }
     
     private String setNoteTo(String note){
-        return noteString = note + octaveString; 
+        return noteString = note + octave + " "; 
     }
 
 }
