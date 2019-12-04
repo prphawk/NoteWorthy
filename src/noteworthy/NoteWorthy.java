@@ -6,6 +6,8 @@
 package noteworthy;
 
 import java.awt.HeadlessException;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,33 +43,33 @@ public class NoteWorthy extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jFrame_MAPEAMENTO = new javax.swing.JFrame();
-        jScrollPane_MAPEAMENTO = new javax.swing.JScrollPane();
-        jTable_MAPEAMENTO = new javax.swing.JTable();
-        jPanel1 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea = new javax.swing.JTextArea();
-        jButton_BUILD = new javax.swing.JButton();
-        jButton_DOWNLOAD = new javax.swing.JButton();
-        jButton_PLAY = new javax.swing.JButton();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu_FILE = new javax.swing.JMenu();
-        jMenuItem_IMPORT = new javax.swing.JMenuItem();
-        jMenuItem_EXPORT = new javax.swing.JMenuItem();
-        jMenu_HELP = new javax.swing.JMenu();
-        jMenuItem_HELP = new javax.swing.JMenuItem();
+        mapFrame = new javax.swing.JFrame();
+        scrollPaneMap = new javax.swing.JScrollPane();
+        mapTable = new javax.swing.JTable();
+        panel = new javax.swing.JPanel();
+        scrollPane = new javax.swing.JScrollPane();
+        textArea = new javax.swing.JTextArea();
+        buildButton = new javax.swing.JButton();
+        downloadButton = new javax.swing.JButton();
+        playButton = new javax.swing.JButton();
+        menuBar = new javax.swing.JMenuBar();
+        fileMenu = new javax.swing.JMenu();
+        importItem = new javax.swing.JMenuItem();
+        exportItem = new javax.swing.JMenuItem();
+        helpMenu = new javax.swing.JMenu();
+        helpItem = new javax.swing.JMenuItem();
 
-        jFrame_MAPEAMENTO.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        jFrame_MAPEAMENTO.setTitle("Mapping");
-        jFrame_MAPEAMENTO.setAlwaysOnTop(true);
-        jFrame_MAPEAMENTO.setLocation(new java.awt.Point(0, 0));
-        jFrame_MAPEAMENTO.setMinimumSize(new java.awt.Dimension(300, 400));
-        jFrame_MAPEAMENTO.setUndecorated(true);
+        mapFrame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        mapFrame.setTitle("Mapping");
+        mapFrame.setAlwaysOnTop(true);
+        mapFrame.setLocation(new java.awt.Point(0, 0));
+        mapFrame.setMinimumSize(new java.awt.Dimension(300, 400));
+        mapFrame.setUndecorated(true);
 
-        jScrollPane_MAPEAMENTO.setPreferredSize(new java.awt.Dimension(453, 351));
+        scrollPaneMap.setPreferredSize(new java.awt.Dimension(453, 351));
 
-        jTable_MAPEAMENTO.setFont(new java.awt.Font("Ebrima", 0, 13)); // NOI18N
-        jTable_MAPEAMENTO.setModel(new javax.swing.table.DefaultTableModel(
+        mapTable.setFont(new java.awt.Font("Ebrima", 0, 13)); // NOI18N
+        mapTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {"a", "Lá"},
                 {"b", "Sí"},
@@ -102,172 +104,172 @@ public class NoteWorthy extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
-        jTable_MAPEAMENTO.setColumnSelectionAllowed(true);
-        jTable_MAPEAMENTO.setName("Mapeamento");
-        jScrollPane_MAPEAMENTO.setViewportView(jTable_MAPEAMENTO);
-        jTable_MAPEAMENTO.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        mapTable.setColumnSelectionAllowed(true);
+        mapTable.setName("Mapeamento");
+        scrollPaneMap.setViewportView(mapTable);
+        mapTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
-        javax.swing.GroupLayout jFrame_MAPEAMENTOLayout = new javax.swing.GroupLayout(jFrame_MAPEAMENTO.getContentPane());
-        jFrame_MAPEAMENTO.getContentPane().setLayout(jFrame_MAPEAMENTOLayout);
-        jFrame_MAPEAMENTOLayout.setHorizontalGroup(
-            jFrame_MAPEAMENTOLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jFrame_MAPEAMENTOLayout.createSequentialGroup()
+        javax.swing.GroupLayout mapFrameLayout = new javax.swing.GroupLayout(mapFrame.getContentPane());
+        mapFrame.getContentPane().setLayout(mapFrameLayout);
+        mapFrameLayout.setHorizontalGroup(
+            mapFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mapFrameLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jScrollPane_MAPEAMENTO, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(scrollPaneMap, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
-        jFrame_MAPEAMENTOLayout.setVerticalGroup(
-            jFrame_MAPEAMENTOLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane_MAPEAMENTO, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        mapFrameLayout.setVerticalGroup(
+            mapFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(scrollPaneMap, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("NoteWorthy");
         setLocation(new java.awt.Point(0, 0));
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        panel.setBackground(new java.awt.Color(255, 255, 255));
 
-        jTextArea.setColumns(20);
-        jTextArea.setFont(new java.awt.Font("Monospaced", 0, 18)); // NOI18N
-        jTextArea.setForeground(new java.awt.Color(102, 102, 102));
-        jTextArea.setLineWrap(true);
-        jTextArea.setRows(5);
-        jTextArea.setText("Sphinx of black quartz, judge my vow.");
-        jTextArea.setToolTipText("");
-        jTextArea.setWrapStyleWord(true);
-        jTextArea.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jTextArea.setSelectionColor(new java.awt.Color(204, 204, 204));
-        jScrollPane1.setViewportView(jTextArea);
+        textArea.setColumns(20);
+        textArea.setFont(new java.awt.Font("Monospaced", 0, 18)); // NOI18N
+        textArea.setForeground(new java.awt.Color(102, 102, 102));
+        textArea.setLineWrap(true);
+        textArea.setRows(5);
+        textArea.setText("Sphinx of black quartz, judge my vow.");
+        textArea.setToolTipText("");
+        textArea.setWrapStyleWord(true);
+        textArea.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        textArea.setSelectionColor(new java.awt.Color(204, 204, 204));
+        scrollPane.setViewportView(textArea);
 
-        jButton_BUILD.setBackground(new java.awt.Color(102, 102, 102));
-        jButton_BUILD.setForeground(new java.awt.Color(255, 255, 255));
-        jButton_BUILD.setText("Build");
-        jButton_BUILD.addActionListener(new java.awt.event.ActionListener() {
+        buildButton.setBackground(new java.awt.Color(102, 102, 102));
+        buildButton.setForeground(new java.awt.Color(255, 255, 255));
+        buildButton.setText("Build");
+        buildButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_BUILDActionPerformed(evt);
+                buildButtonPressed(evt);
             }
         });
 
-        jButton_DOWNLOAD.setBackground(new java.awt.Color(102, 102, 102));
-        jButton_DOWNLOAD.setForeground(new java.awt.Color(255, 255, 255));
-        jButton_DOWNLOAD.setText("Download");
-        jButton_DOWNLOAD.addActionListener(new java.awt.event.ActionListener() {
+        downloadButton.setBackground(new java.awt.Color(102, 102, 102));
+        downloadButton.setForeground(new java.awt.Color(255, 255, 255));
+        downloadButton.setText("Download");
+        downloadButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_DOWNLOADActionPerformed(evt);
+                downloadButtonPressed(evt);
             }
         });
 
-        jButton_PLAY.setBackground(new java.awt.Color(102, 102, 102));
-        jButton_PLAY.setForeground(new java.awt.Color(255, 255, 255));
-        jButton_PLAY.setText("Play");
-        jButton_PLAY.addActionListener(new java.awt.event.ActionListener() {
+        playButton.setBackground(new java.awt.Color(102, 102, 102));
+        playButton.setForeground(new java.awt.Color(255, 255, 255));
+        playButton.setText("Play");
+        playButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_PLAYActionPerformed(evt);
+                playButtonPressed(evt);
             }
         });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
+        panel.setLayout(panelLayout);
+        panelLayout.setHorizontalGroup(
+            panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 698, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 698, Short.MAX_VALUE)
+                    .addGroup(panelLayout.createSequentialGroup()
                         .addGap(6, 6, 6)
-                        .addComponent(jButton_DOWNLOAD)
+                        .addComponent(downloadButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton_BUILD, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(buildButton, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton_PLAY, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(playButton, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(12, 12, 12)))
                 .addContainerGap())
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        panelLayout.setVerticalGroup(
+            panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton_BUILD)
-                    .addComponent(jButton_DOWNLOAD)
-                    .addComponent(jButton_PLAY))
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(buildButton)
+                    .addComponent(downloadButton)
+                    .addComponent(playButton))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jMenuBar1.setBackground(new java.awt.Color(204, 204, 204));
-        jMenuBar1.setForeground(new java.awt.Color(51, 51, 51));
+        menuBar.setBackground(new java.awt.Color(204, 204, 204));
+        menuBar.setForeground(new java.awt.Color(51, 51, 51));
 
-        jMenu_FILE.setBackground(new java.awt.Color(204, 204, 204));
-        jMenu_FILE.setForeground(new java.awt.Color(102, 102, 102));
-        jMenu_FILE.setText("File");
-        jMenu_FILE.setFont(new java.awt.Font("Dialog", 1, 13)); // NOI18N
+        fileMenu.setBackground(new java.awt.Color(204, 204, 204));
+        fileMenu.setForeground(new java.awt.Color(102, 102, 102));
+        fileMenu.setText("File");
+        fileMenu.setFont(new java.awt.Font("Dialog", 1, 13)); // NOI18N
 
-        jMenuItem_IMPORT.setText("Import .txt file");
-        jMenuItem_IMPORT.addActionListener(new java.awt.event.ActionListener() {
+        importItem.setText("Import .txt file");
+        importItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem_IMPORTActionPerformed(evt);
+                importItemPressed(evt);
             }
         });
-        jMenu_FILE.add(jMenuItem_IMPORT);
+        fileMenu.add(importItem);
 
-        jMenuItem_EXPORT.setText("Export .txt file");
-        jMenuItem_EXPORT.addActionListener(new java.awt.event.ActionListener() {
+        exportItem.setText("Export .txt file");
+        exportItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem_EXPORTActionPerformed(evt);
+                exportItemPressed(evt);
             }
         });
-        jMenu_FILE.add(jMenuItem_EXPORT);
+        fileMenu.add(exportItem);
 
-        jMenuBar1.add(jMenu_FILE);
+        menuBar.add(fileMenu);
 
-        jMenu_HELP.setBackground(new java.awt.Color(204, 204, 204));
-        jMenu_HELP.setForeground(new java.awt.Color(102, 102, 102));
-        jMenu_HELP.setText("Help");
-        jMenu_HELP.setFont(new java.awt.Font("Dialog", 1, 13)); // NOI18N
+        helpMenu.setBackground(new java.awt.Color(204, 204, 204));
+        helpMenu.setForeground(new java.awt.Color(102, 102, 102));
+        helpMenu.setText("Help");
+        helpMenu.setFont(new java.awt.Font("Dialog", 1, 13)); // NOI18N
 
-        jMenuItem_HELP.setText("Show char map");
-        jMenuItem_HELP.addActionListener(new java.awt.event.ActionListener() {
+        helpItem.setText("Show char map");
+        helpItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem_CHARMAPActionPerformed(evt);
+                mapItemPressed(evt);
             }
         });
-        jMenu_HELP.add(jMenuItem_HELP);
+        helpMenu.add(helpItem);
 
-        jMenuBar1.add(jMenu_HELP);
+        menuBar.add(helpMenu);
 
-        setJMenuBar(jMenuBar1);
+        setJMenuBar(menuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton_BUILDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_BUILDActionPerformed
+    private void buildButtonPressed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buildButtonPressed
     // Operaçao para contruir nova Pattern a partir do texto presente na caixa de texto
         try {
-            Music music = new Music(jTextArea.getText());
+            Music music = new Music(textArea.getText());
             pattern = music.build();                                            //devolve Pattern construida, atribui ela a classe NoteWorthy para ser reproduzida indefinidamente ou até outra pattern ser construida
             JOptionPane.showMessageDialog(null, "Sucesso");                     //aviso (temporário pq eh mt feio) que pode reproduzir pattern em PLAY
         } catch (HeadlessException ex) {
             Logger.getLogger(NoteWorthy.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButton_BUILDActionPerformed
+    }//GEN-LAST:event_buildButtonPressed
 
-    private void jButton_DOWNLOADActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_DOWNLOADActionPerformed
+    private void downloadButtonPressed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downloadButtonPressed
     //Operação para salvar Pattern construida em arquivo MIDI    
         Files files = new Files();
         try {
@@ -275,41 +277,45 @@ public class NoteWorthy extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(NoteWorthy.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButton_DOWNLOADActionPerformed
+    }//GEN-LAST:event_downloadButtonPressed
 
-    private void jMenuItem_IMPORTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_IMPORTActionPerformed
+    private void importItemPressed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_importItemPressed
     // Operação de importação do conteúdo de arquivo .txt para caixa de texto
         Files files = new Files();
         try {
             String textFromFile = files.read();
             if(textFromFile != null) 
-                jTextArea.setText(textFromFile);
+                textArea.setText(textFromFile);
         } catch (IOException ex) {
             Logger.getLogger(NoteWorthy.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jMenuItem_IMPORTActionPerformed
+    }//GEN-LAST:event_importItemPressed
 
-    private void jMenuItem_EXPORTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_EXPORTActionPerformed
+    private void exportItemPressed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportItemPressed
     // Operação de exportação de arquivo .txt
         Files files = new Files();
         try {
-            files.write(jTextArea.getText());
+            files.write(textArea.getText());
         } catch (FileNotFoundException ex) {
             Logger.getLogger(NoteWorthy.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jMenuItem_EXPORTActionPerformed
+    }//GEN-LAST:event_exportItemPressed
 
-    private void jMenuItem_CHARMAPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_CHARMAPActionPerformed
-        jTable_MAPEAMENTO.setVisible(true);
-    }//GEN-LAST:event_jMenuItem_CHARMAPActionPerformed
+    private void mapItemPressed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mapItemPressed
+        mapFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        mapFrame.setAlwaysOnTop(false);
+        mapFrame.setLocation(0,250);
+        mapFrame.pack();
+        mapFrame.setVisible(!mapFrame.isShowing());
+    }//GEN-LAST:event_mapItemPressed
 
-    private void jButton_PLAYActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_PLAYActionPerformed
+    private void playButtonPressed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButtonPressed
     // Toca o Pattern (do JFugue) já construído por Music e atribuido em NoteWorthy
         if(pattern != null){
             Player player = new Player();
             player.play(pattern);
         }
-    }//GEN-LAST:event_jButton_PLAYActionPerformed
+    }//GEN-LAST:event_playButtonPressed
     
     /**
      * @param args the command line arguments
@@ -349,20 +355,20 @@ public class NoteWorthy extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton_BUILD;
-    private javax.swing.JButton jButton_DOWNLOAD;
-    private javax.swing.JButton jButton_PLAY;
-    private javax.swing.JFrame jFrame_MAPEAMENTO;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem_EXPORT;
-    private javax.swing.JMenuItem jMenuItem_HELP;
-    private javax.swing.JMenuItem jMenuItem_IMPORT;
-    private javax.swing.JMenu jMenu_FILE;
-    private javax.swing.JMenu jMenu_HELP;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane_MAPEAMENTO;
-    private javax.swing.JTable jTable_MAPEAMENTO;
-    private javax.swing.JTextArea jTextArea;
+    private javax.swing.JButton buildButton;
+    private javax.swing.JButton downloadButton;
+    private javax.swing.JMenuItem exportItem;
+    private javax.swing.JMenu fileMenu;
+    private javax.swing.JMenuItem helpItem;
+    private javax.swing.JMenu helpMenu;
+    private javax.swing.JMenuItem importItem;
+    private javax.swing.JFrame mapFrame;
+    private javax.swing.JTable mapTable;
+    private javax.swing.JMenuBar menuBar;
+    private javax.swing.JPanel panel;
+    private javax.swing.JButton playButton;
+    private javax.swing.JScrollPane scrollPane;
+    private javax.swing.JScrollPane scrollPaneMap;
+    private javax.swing.JTextArea textArea;
     // End of variables declaration//GEN-END:variables
 }
