@@ -6,17 +6,13 @@
 package noteworthy;
 
 import java.awt.HeadlessException;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import java.io.File;
 import java.io.FileNotFoundException;
 import org.jfugue.player.*;
 import org.jfugue.pattern.*;
-
 
 /**
  *
@@ -273,7 +269,8 @@ public class NoteWorthy extends javax.swing.JFrame {
     //Operação para salvar Pattern construida em arquivo MIDI    
         Files files = new Files();
         try {
-            files.write(pattern);
+            if(pattern != null)
+                files.write(pattern);
         } catch (IOException ex) {
             Logger.getLogger(NoteWorthy.class.getName()).log(Level.SEVERE, null, ex);
         }

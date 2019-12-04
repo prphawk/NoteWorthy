@@ -32,13 +32,14 @@ public class Music {
     private static final int BPM_DEFAULT = 120;                                 //agraggio
     private static final int VOLUME_DEFAULT = 70;
     private static final int VOLUME_STEP = 10;
+    private static final int MAX_LIMIT = 127;
     
     private int octave;                                                         //valores numéricos para operações
     private int instrument;
     private int bpm;
     private int volume;
     
-    private String text;
+    private final String text;
     private String noteString;                                                  //ultima nota tocada    
   
     
@@ -76,10 +77,10 @@ public class Music {
                 case ';': musicString.append(Note.PAUSE); break;
                 
                 case '.':
-                case '?': octave = OCTAVE_DEFAULT; break;                       //volta a oitava e volume (n implementado) default
+                case '?': octave = OCTAVE_DEFAULT; volume = VOLUME_DEFAULT; break;                       //volta a oitava e volume default
                 
-                case '+': musicString.append(setVolumeTo(VOLUME_STEP)); break;
-                case '-': musicString.append(setVolumeTo(-VOLUME_STEP)); break;
+                case '+': musicString.append(setVolumeTo(volume+VOLUME_STEP)); break;
+                case '-': musicString.append(setVolumeTo(volume-VOLUME_STEP)); break;
                 
                 case 'T':
                     if(text.charAt(i+1) == '+') musicString.append(setBPMTo(bpm+50));
@@ -87,13 +88,13 @@ public class Music {
                     i++; break;
                 
                 case 'O': 
-                    if(text.charAt(i+1) == '+' && octave < 9) octave++;         //de 0 a 9
+                    if(text.charAt(i+1) == '+' && octave < 9) octave++;         //de 0 a 9 sempre
                     if(text.charAt(i+1) == '-' && octave > 0) octave--;
                     i++; break;
                    
                 case '\n': 
                     Random rand = new Random();
-                    musicString.append(setInstrumentTo(rand.nextInt(127))); break; 
+                    musicString.append(setInstrumentTo(rand.nextInt(MAX_LIMIT))); break; 
                    
                 case '1':
                 case '2':
@@ -115,25 +116,25 @@ public class Music {
     }
 
     private String setBPMTo(int value){
-        if(bpm > 50)
+        if(value > 0)
             bpm = value;
         return "T" + bpm + " ";
     }
     
     private String setInstrumentTo(int value){
-        if (value < 128)
+        if (value < MAX_LIMIT)
             instrument = value; 
         return "I" + instrument + " "; 
     }
     
+    private String setVolumeTo(int value){
+        if (value < MAX_LIMIT)
+            volume = value;            
+        return ":CON(7," + volume + ") ";
+    }
+        
     private String setNoteTo(String note){
         return noteString = note + octave + " "; 
-    }
-    
-    private String setVolumeTo(int value)
-    {
-        volume = volume+value;
-        return ":CON(7," + volume + ") ";
     }
 
 }

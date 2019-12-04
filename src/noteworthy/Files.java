@@ -11,8 +11,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -98,7 +96,7 @@ public class Files {
         File directory = selectFile(false);                                     //seleciona o diretório onde quer escrever o novo arquivo
         File file = null;
         
-        do{
+        do {
             overwrite = NOT_FOUND;
             String fileName = JOptionPane.showInputDialog(null,"Save file as:", "untitled" + fileType);
             file = new File(buildPath(directory, fileName, fileType));
