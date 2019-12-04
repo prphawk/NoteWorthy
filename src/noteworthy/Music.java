@@ -30,10 +30,13 @@ public class Music {
     private static final int OCTAVE_DEFAULT = 5;                                //5ª oitava
     private static final int INSTRUMENT_DEFAULT = 0;                            //piano
     private static final int BPM_DEFAULT = 120;                                 //agraggio
+    private static final int VOLUME_DEFAULT = 70;
+    private static final int VOLUME_STEP = 10;
     
     private int octave;                                                         //valores numéricos para operações
     private int instrument;
     private int bpm;
+    private int volume;
     
     private String text;
     private String noteString;                                                  //ultima nota tocada    
@@ -45,6 +48,7 @@ public class Music {
         octave = OCTAVE_DEFAULT;                                                //5
         instrument = INSTRUMENT_DEFAULT;                                        //0
         bpm = BPM_DEFAULT;                                                      //120
+        volume = VOLUME_DEFAULT;
         noteString = Note.PAUSE;                                                //caso a operação seja repetir ultima nota sem nenhuma nota ter sido tocada, emite pausa -> "R "
     }
     
@@ -74,8 +78,8 @@ public class Music {
                 case '.':
                 case '?': octave = OCTAVE_DEFAULT; break;                       //volta a oitava e volume (n implementado) default
                 
-                case '+':
-                case '-': /*volume aqui*/ break;
+                case '+': musicString.append(setVolumeTo(VOLUME_STEP)); break;
+                case '-': musicString.append(setVolumeTo(-VOLUME_STEP)); break;
                 
                 case 'T':
                     if(text.charAt(i+1) == '+') musicString.append(setBPMTo(bpm+50));
@@ -124,6 +128,12 @@ public class Music {
     
     private String setNoteTo(String note){
         return noteString = note + octave + " "; 
+    }
+    
+    private String setVolumeTo(int value)
+    {
+        volume = volume+value;
+        return ":CON(7," + volume + ") ";
     }
 
 }
